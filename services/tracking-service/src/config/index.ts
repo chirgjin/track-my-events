@@ -13,6 +13,12 @@ const validateEnv = cleanEnv(process.env, {
   REDIS_PUBSUB_DB: num({
     default: 0,
   }),
+
+  REDIS_OM_HOST: str(),
+  REDIS_OM_PORT: port(),
+  REDIS_OM_DB: num({
+    default: 0,
+  }),
 })
 
 export const {
@@ -21,5 +27,8 @@ export const {
   REDIS_PUBSUB_HOST,
   REDIS_PUBSUB_PORT,
   REDIS_PUBSUB_DB,
+  REDIS_OM_HOST,
+  REDIS_OM_PORT,
+  REDIS_OM_DB,
 } = validateEnv
 export const APP_ROOT = resolve(__dirname, '..')
