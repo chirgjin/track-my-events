@@ -1,14 +1,14 @@
 import { Entity, Schema } from 'redis-om'
 
 import { generateRandomString } from 'src/helpers'
-import { client } from 'src/models'
+import { client } from 'src/redisClient'
 
 export class AccessToken extends Entity {
   public static async generateToken() {
     let token: string
 
     do {
-      token = await generateRandomString(16)
+      token = await generateRandomString(24)
     } while (
       (await accessTokenRepository
         .search()

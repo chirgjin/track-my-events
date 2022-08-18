@@ -2,6 +2,8 @@ import express from 'express'
 import morgan from 'morgan'
 
 import { NODE_ENV, PORT } from 'src/config'
+import ErrorMiddleware from 'src/middlewares/ErrorMiddleware'
+import ResponseMiddleware from 'src/middlewares/ResponseMiddleware'
 import { router } from 'src/routes'
 
 class App {
@@ -18,9 +20,9 @@ class App {
    * Function to initialize web-server.
    * Initializes all the middlewares, routes & whole express server.
    */
-  public initializeServer() {
+  public async initializeServer() {
     this.app = express()
-    this.initialize()
+    await this.initialize()
     this.initializeMiddlewares()
     this.initializeRoutes()
     this.initializeErrorHandling()
@@ -32,8 +34,8 @@ class App {
   /**
    * Function to initialize repl
    */
-  public initializeRepl() {
-    this.initialize()
+  public async initializeRepl() {
+    await this.initialize()
 
     return this
   }
@@ -42,8 +44,8 @@ class App {
    * Function which initializes things common to both
    * repl & web-server.
    */
-  private initialize() {
-    require('src/models/client')
+  private async initialize() {
+    await require('src/redisClient').createIndexes()
   }
 
   public listen() {
@@ -63,6 +65,7 @@ class App {
     this.app.use(morgan('dev'))
     this.app.use(express.json({}))
     this.app.use(express.urlencoded({ extended: true }))
+    this.app.use(ResponseMiddleware)
   }
 
   private initializeRoutes() {
@@ -70,7 +73,7 @@ class App {
   }
 
   private initializeErrorHandling() {
-    // this.app.use(ErrorMiddleware);
+    this.app.use(ErrorMiddleware)
   }
 }
 

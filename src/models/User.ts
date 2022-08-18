@@ -2,7 +2,7 @@ import argon2 from 'argon2'
 import { Entity, Schema } from 'redis-om'
 
 import { generateRandomString } from 'src/helpers'
-import { client } from 'src/models'
+import { client } from 'src/redisClient'
 
 export class User extends Entity {
   public name: string
@@ -30,6 +30,14 @@ export class User extends Entity {
     } catch (e) {
       return false
     }
+  }
+
+  public toJSON(): Record<string, any> {
+    const json = super.toJSON()
+
+    delete json.password
+
+    return json
   }
 }
 
