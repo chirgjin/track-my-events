@@ -17,7 +17,6 @@ export const pubsubClient = createClient({
 pubsubClient.on('error', (err) => console.error('Redis Client Error', err))
 
 /****** Redis OM client configuration ******/
-
 export const omClient = new Client()
 
 omClient.open(`redis://${REDIS_OM_HOST}:${REDIS_OM_PORT}/${REDIS_OM_DB}`)

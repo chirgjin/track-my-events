@@ -3,6 +3,7 @@
     "@adonisjs/repl": "^3.1.11",
     "@poppinss/utils": "^5.0.0",
     "@redis/client": "^1.2.0",
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "envalid": "^7.3.1",
     "express": "^4.18.1",
