@@ -1,5 +1,6 @@
 import argon2 from 'argon2'
 
+import BadRequestException from 'src/exceptions/BadRequestException'
 import { User, userRepository } from 'src/models'
 
 export async function createUser({
@@ -12,7 +13,9 @@ export async function createUser({
   if (
     (await userRepository.search().where('email').equals(userEmail).count()) > 0
   ) {
-    throw new Error('Email already exists')
+    throw new BadRequestException({
+      email: 'User with this email already exists',
+    })
   }
 
   const user = await userRepository.createAndSave({
