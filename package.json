@@ -1,12 +1,14 @@
 {
   "dependencies": {
     "@adonisjs/repl": "^3.1.11",
+    "@poppinss/utils": "^5.0.0",
     "argon2": "^0.28.7",
     "dotenv": "^16.0.1",
     "envalid": "^7.3.1",
     "express": "^4.18.1",
     "morgan": "^1.10.0",
     "redis-om": "^0.3.6",
+    "tsc-alias": "^1.7.0",
     "typescript": "^4.7.4"
   },
   "name": "user-service",
@@ -31,6 +33,7 @@
   },
   "scripts": {
     "ts": "node -r @adonisjs/require-ts/build/register -r tsconfig-paths/register",
+    "start": "node src/server.js",
     "build": "yarn ts ./build.ts",
     "dev": "nodemon",
     "lint": "eslint . --ext=.ts",
@@ -38,8 +41,5 @@
     "repl": "yarn ts src/repl"
   },
   "author": "chirgjin<chirgjin@gmail.com>",
-  "license": "ISC",
-  "lint-staged": {
-    "*.ts": "eslint --cache --fix"
-  }
+  "license": "ISC"
 }
