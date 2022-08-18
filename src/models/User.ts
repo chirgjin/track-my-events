@@ -1,3 +1,4 @@
+import argon2 from 'argon2'
 import { Entity, Schema } from 'redis-om'
 
 import { generateRandomString } from 'src/helpers'
@@ -21,6 +22,14 @@ export class User extends Entity {
     )
 
     return apiKey
+  }
+
+  public async verifyPassword(password: string) {
+    try {
+      return await argon2.verify(this.password, password)
+    } catch (e) {
+      return false
+    }
   }
 }
 
