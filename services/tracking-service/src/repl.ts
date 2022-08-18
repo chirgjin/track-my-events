@@ -14,7 +14,7 @@ const repl = new Repl(
 repl.ready((repl) => {
   // initialize the app (database & other functionalities when repl is ready)
   repl.server.context.app = new App()
-  repl.server.context.app.initializeRepl()
+  repl.server.context.app.initialize()
 })
 
 repl.addMethod(

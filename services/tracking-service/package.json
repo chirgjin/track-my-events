@@ -37,7 +37,9 @@
     "dev": "nodemon",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
-    "repl": "yarn ts src/repl"
+    "repl": "yarn ts src/repl",
+    "ts:subscriber": "yarn ts src/subscriber.ts",
+    "runSubscriber": "node src/subscriber.js"
   },
   "author": "chirgjin<chirgjin@gmail.com>",
   "license": "MIT"

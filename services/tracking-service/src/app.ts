@@ -4,6 +4,7 @@ import morgan from 'morgan'
 import { NODE_ENV, PORT } from 'src/config'
 import ErrorMiddleware from 'src/middlewares/ErrorMiddleware'
 import ResponseMiddleware from 'src/middlewares/ResponseMiddleware'
+import UserMiddleware from 'src/middlewares/UserMiddleware'
 import { router } from 'src/routes'
 
 class App {
@@ -32,20 +33,11 @@ class App {
   }
 
   /**
-   * Function to initialize repl
-   */
-  public async initializeRepl() {
-    await this.initialize()
-
-    return this
-  }
-
-  /**
    * Function which initializes things common to both
    * repl & web-server.
    */
-  private async initialize() {
-    require('src/redisClient')
+  public async initialize() {
+    await require('src/redisClient').pubsubClient.connect()
   }
 
   public listen() {
@@ -65,6 +57,7 @@ class App {
     this.app.use(morgan('dev'))
     this.app.use(express.json({}))
     this.app.use(express.urlencoded({ extended: true }))
+    this.app.use(UserMiddleware)
     this.app.use(ResponseMiddleware)
   }
 

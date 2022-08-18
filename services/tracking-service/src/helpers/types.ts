@@ -13,3 +13,24 @@ export type SetKey<
       : T & Record<U1, SetKey<{}, U2, Value>>
     : T & Record<U1, SetKey<{}, U2, Value>>
   : T & Record<Key, Value>
+
+export type User = {
+  entityId: string
+  name: string
+  email: string
+  apiKey: string
+  createdAt: string
+  updatedAt: string | null
+}
+
+export type EventData = {
+  apiKey: string
+  sessionId: string
+  eventTime: number
+  eventName: string
+  page: string
+  referrer?: string | null
+  context: Record<any, any>
+  userId?: string | null
+  userAgent: string | null
+}
