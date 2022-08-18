@@ -6,6 +6,7 @@ import {
   Response,
   NextFunction,
 } from 'express'
+
 import { APP_ROOT } from 'src/config'
 
 /**
