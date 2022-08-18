@@ -1,0 +1,15 @@
+{
+  "name": "user-tracking",
+  "version": "1.0.0",
+  "private": "true",
+  "workspaces": [
+    "services/*"
+  ],
+  "description": "User tracking system made using redis & express",
+  "repository": {
+    "type": "git",
+    "url": "github-personal:chirgjin/user-tracking"
+  },
+  "author": "chirgjin <chirgjin@gmail.com>",
+  "license": "MIT"
+}
