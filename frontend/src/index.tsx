@@ -1,14 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter, Routes } from 'react-router-dom'
+import './assets/nucleo/css/nucleo-svg.css'
+import './assets/nucleo/css/nucleo.css'
 import './assets/scss/argon-dashboard-react.scss'
 
-import Login from './views/Login'
-import reportWebVitals from './reportWebVitals'
+import { renderRoutes } from 'src/helpers'
+import reportWebVitals from 'src/reportWebVitals'
+import { routes } from 'src/routes'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <Login />
+    <BrowserRouter>
+      {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+      <Routes>{renderRoutes(routes)}</Routes>
+    </BrowserRouter>
   </React.StrictMode>
 )
 
