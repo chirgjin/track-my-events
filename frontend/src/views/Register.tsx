@@ -209,6 +209,7 @@ export default function Register() {
                       type="submit"
                       disabled={loading}
                     >
+                      {loading && <i className="fas fa-spin fa-spinner mr-2" />}
                       Create Account
                     </Button>
                     <br />

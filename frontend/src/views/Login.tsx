@@ -148,6 +148,7 @@ export default function Login() {
                       type="submit"
                       disabled={loading}
                     >
+                      {loading && <i className="fas fa-spin fa-spinner mr-2" />}
                       Sign in
                     </Button>
                     <br />
