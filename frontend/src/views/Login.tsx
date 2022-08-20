@@ -14,30 +14,26 @@ import {
   Row,
 } from 'reactstrap'
 import { login, isAxiosError, ErrorResponse } from 'src/apis'
+import { FormState } from 'src/helpers'
 import { routes } from 'src/routes'
 
 export default function Login() {
   const navigate = useNavigate()
+
   const [loading, setLoading] = React.useState(false)
-  const [email, setEmail] = React.useState<{
-    error: false | string
-    value: string
-  }>({
-    error: false,
-    value: '',
-  })
-  const [password, setPassword] = React.useState<{
-    error: false | string
-    value: string
-  }>({
-    error: false,
-    value: '',
+  const [state, setState] = React.useState<FormState<'email' | 'password'>>({
+    email: {
+      value: '',
+    },
+    password: {
+      value: '',
+    },
   })
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (password.error || email.error || loading) {
+    if (state.password.error || state.email.error || loading) {
       return
     }
 
@@ -45,8 +41,8 @@ export default function Login() {
 
     try {
       await login({
-        email: email.value,
-        password: password.value,
+        email: state.email.value,
+        password: state.password.value,
       })
 
       //TODO: navigate to dashboard
@@ -56,15 +52,13 @@ export default function Login() {
         const data = error.response.data as ErrorResponse
 
         for (const key in data.errors) {
-          if (key === 'email') {
-            setEmail((state) => ({
-              error: data.errors[key].toString(),
-              value: state.value,
-            }))
-          } else if (key === 'password') {
-            setPassword((state) => ({
-              error: data.errors[key].toString(),
-              value: state.value,
+          if (key === 'email' || key === 'password') {
+            setState((state) => ({
+              ...state,
+              [key]: {
+                error: data.errors[key].toString(),
+                value: state[key].value,
+              },
             }))
           }
         }
@@ -72,6 +66,18 @@ export default function Login() {
     } finally {
       setLoading(false)
     }
+  }
+
+  function handleOnChange(
+    key: keyof typeof state,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setState((state) => ({
+      ...state,
+      [key]: {
+        value: event.target.value,
+      },
+    }))
   }
 
   return (
@@ -86,46 +92,42 @@ export default function Login() {
               <CardBody className="px-lg-5 py-lg-5">
                 <Form role="form" onSubmit={handleSubmit}>
                   <FormGroup
-                    className={`mb-3 ${(email.error && 'has-danger') || ''}`}
+                    className={`mb-3 ${
+                      (state.email.error && 'has-danger') || ''
+                    }`}
                   >
                     <InputGroup>
                       <Input
                         placeholder="Email"
                         type="email"
                         autoComplete="new-email"
-                        value={email.value}
-                        onChange={(event) =>
-                          setEmail({
-                            value: event.target.value,
-                            error: false,
-                          })
-                        }
-                        className={(email.error && 'is-invalid') || ''}
+                        value={state.email.value}
+                        onChange={handleOnChange.bind(null, 'email')}
+                        className={(state.email.error && 'is-invalid') || ''}
                       />
                     </InputGroup>
-                    {email.error ? (
-                      <small className="text-warning p-2">{email.error}</small>
+                    {state.email.error ? (
+                      <small className="text-warning p-2">
+                        {state.email.error}
+                      </small>
                     ) : null}
                   </FormGroup>
-                  <FormGroup className={(password.error && 'has-danger') || ''}>
+                  <FormGroup
+                    className={(state.password.error && 'has-danger') || ''}
+                  >
                     <InputGroup>
                       <Input
                         placeholder="Password"
                         type="password"
                         autoComplete="new-password"
-                        value={password.value}
-                        onChange={(event) => {
-                          setPassword({
-                            value: event.target.value,
-                            error: false,
-                          })
-                        }}
-                        className={(password.error && 'is-invalid') || ''}
+                        value={state.password.value}
+                        onChange={handleOnChange.bind(null, 'password')}
+                        className={(state.password.error && 'is-invalid') || ''}
                       />
                     </InputGroup>
-                    {password.error ? (
+                    {state.password.error ? (
                       <small className="text-warning p-2">
-                        {password.error}
+                        {state.password.error}
                       </small>
                     ) : null}
                   </FormGroup>
