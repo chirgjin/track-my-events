@@ -1,3 +1,4 @@
+import cors from 'cors'
 import express from 'express'
 import morgan from 'morgan'
 
@@ -53,6 +54,7 @@ class App {
   private initializeMiddlewares() {
     this.app.use(morgan('dev'))
     this.app.use(ResponseMiddleware)
+    this.app.use(cors())
   }
 
   private initializeRoutes() {
