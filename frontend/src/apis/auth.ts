@@ -24,3 +24,33 @@ export async function login({
 
   return response.data.data
 }
+
+export async function register({
+  email,
+  password,
+  confirmPassword,
+  name,
+}: {
+  email: string
+  password: string
+  confirmPassword: string
+  name: string
+}) {
+  const response = await axios.post<{
+    data: {
+      user: User
+      accessToken: string
+      refreshToken: string
+    }
+    errors: null
+  }>('/api/user-service/v1/public/users/', {
+    email,
+    password,
+    confirmPassword,
+    name,
+  })
+
+  auth.update(response.data.data)
+
+  return response.data.data
+}

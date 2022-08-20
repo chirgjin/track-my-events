@@ -12,7 +12,7 @@ class AuthHandler {
   private authData?: {
     accessToken: string
     refreshToken: string
-    user: {}
+    user: User
   }
 
   constructor() {
