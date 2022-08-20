@@ -1,13 +1,15 @@
 import React from 'react'
-import Login from 'src/views/Login'
 import { buildRoutes } from 'src/helpers'
-import Auth from './layouts/Auth'
-import Register from './views/Register'
+import UnAuthenticatedLayout from 'src/layouts/UnAuthenticated'
+import Login from 'src/views/Login'
+import Register from 'src/views/Register'
+import LoggedInLayout from 'src/layouts/LoggedIn'
+import Dashboard from './views/Dashboard'
 
 export const routes = buildRoutes({
   auth: {
     path: 'auth',
-    component: <Auth />,
+    component: <UnAuthenticatedLayout />,
     children: {
       login: {
         path: 'login',
@@ -16,6 +18,17 @@ export const routes = buildRoutes({
       register: {
         path: 'register',
         component: <Register />,
+      },
+    },
+  },
+
+  dashboard: {
+    path: 'dashboard',
+    component: <LoggedInLayout />,
+    children: {
+      overview: {
+        path: '',
+        component: <Dashboard />,
       },
     },
   },

@@ -59,8 +59,7 @@ export default function Register() {
         name: state.name.value,
       })
 
-      //TODO: navigate to dashboard
-      navigate(routes.auth.children.register.fullPath)
+      navigate(routes.dashboard.children.overview.fullPath)
     } catch (error) {
       if (isAxiosError(error) && error.response?.status === 400) {
         const data = error.response.data as ErrorResponse
