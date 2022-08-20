@@ -33,7 +33,11 @@ export default function Login() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (state.password.error || state.email.error || loading) {
+    if (
+      loading ||
+      Object.keys(state).filter((key) => state[key as keyof typeof state].error)
+        .length > 0
+    ) {
       return
     }
 
@@ -52,12 +56,12 @@ export default function Login() {
         const data = error.response.data as ErrorResponse
 
         for (const key in data.errors) {
-          if (key === 'email' || key === 'password') {
+          if (key in state) {
             setState((state) => ({
               ...state,
               [key]: {
                 error: data.errors[key].toString(),
-                value: state[key].value,
+                value: state[key as keyof typeof state].value,
               },
             }))
           }
@@ -104,6 +108,9 @@ export default function Login() {
                         value={state.email.value}
                         onChange={handleOnChange.bind(null, 'email')}
                         className={(state.email.error && 'is-invalid') || ''}
+                        required
+                        minLength={3}
+                        maxLength={256}
                       />
                     </InputGroup>
                     {state.email.error ? (
@@ -123,6 +130,9 @@ export default function Login() {
                         value={state.password.value}
                         onChange={handleOnChange.bind(null, 'password')}
                         className={(state.password.error && 'is-invalid') || ''}
+                        minLength={1}
+                        maxLength={64}
+                        required
                       />
                     </InputGroup>
                     {state.password.error ? (
