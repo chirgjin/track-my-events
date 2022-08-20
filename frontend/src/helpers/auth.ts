@@ -15,6 +15,10 @@ class AuthHandler {
     user: User
   }
 
+  public get isLoggedIn() {
+    return Boolean(this.accessToken && this.authData?.refreshToken && this.user)
+  }
+
   constructor() {
     try {
       this.authData = JSON.parse(

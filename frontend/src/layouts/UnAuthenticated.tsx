@@ -1,8 +1,14 @@
 import React from 'react'
 import { Container, Row, Col } from 'reactstrap'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import auth from 'src/helpers/auth'
+import { routes } from 'src/routes'
 
-export default function Auth() {
+export default function UnAuthenticatedLayout() {
+  if (auth.isLoggedIn) {
+    return <Navigate to={routes.dashboard.children.overview.fullPath} />
+  }
+
   return (
     <>
       <div className="main-content">
