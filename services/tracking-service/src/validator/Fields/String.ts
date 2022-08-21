@@ -18,6 +18,7 @@ export interface StringFieldConfig extends BaseFieldConfig {
   minLength?: number
   trim?: boolean // defaults to true
   email?: boolean
+  choices?: string[]
 }
 
 /**
@@ -80,6 +81,13 @@ export class StringField<Config extends StringFieldConfig> extends BaseField<
 
     if (this.config.email && !finalValue.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       throw new FieldValidationException(FIELD_MUST_BE_VALID_EMAIL)
+    }
+
+    if (
+      Array.isArray(this.config.choices) &&
+      !this.config.choices.includes(finalValue)
+    ) {
+      throw new FieldValidationException('Invalid choice')
     }
 
     return finalValue
