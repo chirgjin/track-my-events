@@ -1,7 +1,11 @@
 import { Request, Response } from 'express'
 
 import BadRequestException from 'src/exceptions/BadRequestException'
-import { refreshTokenRepository, userRepository } from 'src/models'
+import {
+  accessTokenRepository,
+  refreshTokenRepository,
+  userRepository,
+} from 'src/models'
 import { createAccessToken, createRefreshToken } from 'src/services'
 import { StringField, validate } from 'src/validator'
 
@@ -77,5 +81,34 @@ export default class {
       },
       200
     )
+  }
+
+  public async logout(req: Request, res: Response) {
+    const body = await validate(req.body, {
+      refreshToken: new StringField({}),
+      accessToken: new StringField({}),
+    })
+
+    const accessToken = await accessTokenRepository
+      .search()
+      .where('token')
+      .equals(body.accessToken)
+      .first()
+
+    if (accessToken) {
+      await accessTokenRepository.remove(accessToken.entityId)
+    }
+
+    const refreshToken = await refreshTokenRepository
+      .search()
+      .where('token')
+      .equals(body.refreshToken)
+      .first()
+
+    if (refreshToken) {
+      await refreshTokenRepository.remove(refreshToken.entityId)
+    }
+
+    return res.success({}, 200)
   }
 }

@@ -16,3 +16,4 @@ router.post(
   '/auth/refresh-token/',
   'Public/AuthenticationController.refreshToken'
 )
+router.post('/auth/logout/', 'Public/AuthenticationController.logout')
