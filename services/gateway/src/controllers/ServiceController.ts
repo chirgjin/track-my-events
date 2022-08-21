@@ -51,7 +51,6 @@ export default class {
 
           return acc
         }, {}),
-      params: req.query,
       data: req,
       method: req.method,
       url: `${serviceConfig.url}${path}`,
