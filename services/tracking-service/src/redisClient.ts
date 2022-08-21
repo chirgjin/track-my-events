@@ -2,12 +2,12 @@ import { createClient } from '@redis/client'
 import { Client, Repository } from 'redis-om'
 
 import {
+  REDIS_OM_DB,
+  REDIS_OM_HOST,
+  REDIS_OM_PORT,
   REDIS_PUBSUB_DB,
   REDIS_PUBSUB_HOST,
   REDIS_PUBSUB_PORT,
-  REDIS_OM_HOST,
-  REDIS_OM_PORT,
-  REDIS_OM_DB,
 } from 'src/config'
 
 /****** Pub/Sub Client configuration  ******/

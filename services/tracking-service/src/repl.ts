@@ -14,8 +14,21 @@ const repl = new Repl(
 repl.ready((repl) => {
   // initialize the app (database & other functionalities when repl is ready)
   repl.server.context.app = new App()
-  repl.server.context.app.initialize()
+  repl.server.context.app.initialize().then(() => {
+    require('src/controllers/Public/EventsController')
+  })
 })
+
+// add helpers to help the developer
+repl.addMethod(
+  'loadModels',
+  () => {
+    return (repl.server.context.models = require(`${APP_ROOT}/models`))
+  },
+  {
+    description: 'Load all models & store them in `models` variable',
+  }
+)
 
 repl.addMethod(
   'loadHelpers',
