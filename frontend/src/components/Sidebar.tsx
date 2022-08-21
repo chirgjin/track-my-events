@@ -11,6 +11,7 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap'
+import { logout } from 'src/apis'
 import auth from 'src/helpers/auth'
 import { routes } from 'src/routes'
 
@@ -78,6 +79,24 @@ export function SideBar() {
                   </NavItem>
                 )
               })}
+
+            <NavItem>
+              <NavLink
+                href="#"
+                onClick={(event) => {
+                  const target = event.target as HTMLAnchorElement
+                  if (target.getAttribute('disabled') === 'true') {
+                    return
+                  }
+
+                  target.setAttribute('disabled', 'true')
+                  target.removeAttribute('href')
+                  logout().then(() => window.location.reload())
+                }}
+              >
+                <i className="fas fa-right-from-bracket" /> Logout
+              </NavLink>
+            </NavItem>
           </Nav>
         </Collapse>
       </Container>

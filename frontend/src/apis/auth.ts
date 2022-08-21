@@ -84,3 +84,14 @@ export async function refreshToken({ refreshToken }: { refreshToken: string }) {
     throw err
   }
 }
+
+export async function logout() {
+  await axios
+    .post('/api/user-service/v1/public/auth/logout/', {
+      accessToken: auth.accessToken,
+      refreshToken: auth.refreshToken,
+    })
+    .catch((err) => console.error(err))
+
+  auth.update(null)
+}
