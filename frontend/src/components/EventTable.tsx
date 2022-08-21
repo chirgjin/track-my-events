@@ -1,20 +1,33 @@
 import React from 'react'
 import { Card, CardHeader, Row, Table } from 'reactstrap'
+import { eventsList } from 'src/apis'
 
 export function EventTable() {
   const [events, setEvents] = React.useState<
     {
-      name: string
+      eventName: string
       count: number
-      uniqueUsers: number
+      users: number
+      sessions: number
     }[]
-  >([
-    {
-      name: 'Test',
-      count: 10,
-      uniqueUsers: 1,
-    },
-  ])
+  >()
+
+  React.useEffect(() => {
+    let ignore = false
+
+    async function fetchData() {
+      if (!ignore) {
+        const data = await eventsList('eventName')
+        setEvents(data)
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   return (
     <>
@@ -31,17 +44,19 @@ export function EventTable() {
             <tr>
               <th>Event Name</th>
               <th>Count</th>
-              <th>Unique users</th>
+              <th>Users</th>
+              <th>Sessions</th>
             </tr>
           </thead>
           <tbody>
             {events ? (
               events.map((event) => {
                 return (
-                  <tr key={event.name}>
-                    <th>{event.name}</th>
+                  <tr key={event.eventName}>
+                    <th>{event.eventName}</th>
                     <td>{event.count}</td>
-                    <td>{event.uniqueUsers}</td>
+                    <td>{event.users}</td>
+                    <td>{event.sessions}</td>
                   </tr>
                 )
               })

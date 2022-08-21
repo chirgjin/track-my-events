@@ -18,6 +18,7 @@
 import ChartJs from 'chart.js'
 import React from 'react'
 import { Line } from 'react-chartjs-2'
+import { dailyActiveUsers } from 'src/apis'
 
 const mode: 'dark' | 'light' = 'light' //(themeMode) ? themeMode : 'light';
 const fonts = {
@@ -181,10 +182,28 @@ export function Chart() {
 
   const [activeUsers, setActiveUsers] = React.useState<
     {
-      date: string
-      count: number
+      day: string
+      users: number
+      sessions: number
     }[]
   >()
+
+  React.useEffect(() => {
+    let ignore = false
+
+    async function fetchData() {
+      if (!ignore) {
+        const data = await dailyActiveUsers()
+        setActiveUsers(data)
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   return (
     <>
@@ -205,13 +224,18 @@ export function Chart() {
             },
           }}
           data={{
-            labels: activeUsers.map(({ date }) => date),
+            labels: activeUsers.map(({ day }) => day),
             datasets: [
               {
                 label: 'Daily Active Users',
-                data: activeUsers.map(({ count }) => count),
+                data: activeUsers.map(({ users }) => users),
                 maxBarThickness: 10,
               },
+              // {
+              //   label: 'Daily Active Sessions',
+              //   data: activeUsers.map(({ sessions }) => sessions),
+              //   maxBarThickness: 10,
+              // },
             ],
           }}
         />

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardBody, CardTitle, Col, Row } from 'reactstrap'
+import { overview } from 'src/apis'
 
 export function Overview() {
   const [state, setState] = React.useState<{
@@ -21,6 +22,23 @@ export function Overview() {
       today: null,
     },
   })
+
+  React.useEffect(() => {
+    let ignore = false
+
+    async function fetchData() {
+      if (!ignore) {
+        const data = await overview()
+        setState(data)
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   return (
     <>

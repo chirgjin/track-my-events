@@ -1,20 +1,33 @@
 import React from 'react'
 import { Card, CardHeader, Row, Table } from 'reactstrap'
+import { eventsList } from 'src/apis'
 
 export function PageTable() {
   const [pageData, setPageData] = React.useState<
     {
-      name: string
+      page: string
       count: number
-      uniqueUsers: number
+      users: number
+      sessions: number
     }[]
-  >([
-    {
-      name: 'Test',
-      count: 10,
-      uniqueUsers: 1,
-    },
-  ])
+  >()
+
+  React.useEffect(() => {
+    let ignore = false
+
+    async function fetchData() {
+      if (!ignore) {
+        const data = await eventsList('page')
+        setPageData(data)
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   return (
     <>
@@ -31,17 +44,19 @@ export function PageTable() {
             <tr>
               <th>Page</th>
               <th>Count</th>
-              <th>Unique users</th>
+              <th>Users</th>
+              <th>Sessions</th>
             </tr>
           </thead>
           <tbody>
             {pageData ? (
               pageData.map((page) => {
                 return (
-                  <tr key={page.name}>
-                    <th>{page.name}</th>
+                  <tr key={page.page}>
+                    <th>{page.page}</th>
                     <td>{page.count}</td>
-                    <td>{page.uniqueUsers}</td>
+                    <td>{page.users}</td>
+                    <td>{page.sessions}</td>
                   </tr>
                 )
               })
