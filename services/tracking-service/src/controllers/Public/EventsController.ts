@@ -11,7 +11,7 @@ export default class {
     const body = await validate(req.body, {
       apiKey: new StringField({}),
       sessionId: new StringField({}),
-      userId: new StringField({ required: false, allowNull: true }),
+      userId: new StringField({}),
       eventTime: new NumberField({}), // timestamp in epoch
       eventName: new StringField({}),
       page: new StringField({}),
@@ -72,7 +72,7 @@ export default class {
               `REDUCE`,
               `COUNT_DISTINCT`,
               `1`,
-              `@sessionId`,
+              `@userId`,
               `as`,
               `count`,
             ])
@@ -89,7 +89,7 @@ export default class {
               `REDUCE`,
               `COUNT_DISTINCT`,
               `1`,
-              `@sessionId`,
+              `@userId`,
               `as`,
               `count`,
             ])

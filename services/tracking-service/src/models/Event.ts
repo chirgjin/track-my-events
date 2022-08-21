@@ -11,7 +11,7 @@ export class Event extends Entity {
   public page: string
   public referrer: string | null
   public _context: string // redisJSON doesn't support objects, so we store context in string form
-  public userId: string | null // id of user where the tracking is being done
+  public userId: string // id of user where the tracking is being done. If user doesnt exist then a temp id is generated
   public userAgent: string | null
   public createdAt: Date
 
