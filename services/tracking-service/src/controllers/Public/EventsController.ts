@@ -60,40 +60,42 @@ export default class {
             .count(),
         },
         activeUsers: {
-          today: (
-            await aggregate<{ count: string }>([
-              `FT.AGGREGATE`,
-              `Event:index`,
-              `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
-                today.getTime() / 1000
-              } +inf]) ) (@eventTime:[-inf (${tomorrow.getTime() / 1000}]) )`,
-              `GROUPBY`,
-              0,
-              `REDUCE`,
-              `COUNT_DISTINCT`,
-              `1`,
-              `@userId`,
-              `as`,
-              `count`,
-            ])
-          )[0].count,
-          thisMonth: (
-            await aggregate<{ count: string }>([
-              `FT.AGGREGATE`,
-              `Event:index`,
-              `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
-                monthStart.getTime() / 1000
-              } +inf]) ) (@eventTime:[-inf (${tomorrow.getTime() / 1000}]) )`,
-              `GROUPBY`,
-              0,
-              `REDUCE`,
-              `COUNT_DISTINCT`,
-              `1`,
-              `@userId`,
-              `as`,
-              `count`,
-            ])
-          )[0].count,
+          today:
+            (
+              await aggregate<{ count: string }>([
+                `FT.AGGREGATE`,
+                `Event:index`,
+                `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
+                  today.getTime() / 1000
+                } +inf]) ) (@eventTime:[-inf (${tomorrow.getTime() / 1000}]) )`,
+                `GROUPBY`,
+                0,
+                `REDUCE`,
+                `COUNT_DISTINCT`,
+                `1`,
+                `@userId`,
+                `as`,
+                `count`,
+              ])
+            ).pop()?.count ?? 0,
+          thisMonth:
+            (
+              await aggregate<{ count: string }>([
+                `FT.AGGREGATE`,
+                `Event:index`,
+                `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
+                  monthStart.getTime() / 1000
+                } +inf]) ) (@eventTime:[-inf (${tomorrow.getTime() / 1000}]) )`,
+                `GROUPBY`,
+                0,
+                `REDUCE`,
+                `COUNT_DISTINCT`,
+                `1`,
+                `@userId`,
+                `as`,
+                `count`,
+              ])
+            ).pop()?.count ?? 0,
         },
       },
       200
