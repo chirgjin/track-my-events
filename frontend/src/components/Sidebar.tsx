@@ -11,6 +11,7 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap'
+import auth from 'src/helpers/auth'
 import { routes } from 'src/routes'
 
 export function SideBar() {
@@ -62,6 +63,8 @@ export function SideBar() {
               </Col>
             </Row>
           </div>
+
+          <h4 className="mt-0 text-primary ml--1">Welcome {auth.user!.name}</h4>
 
           <Nav navbar>
             {Object.values(routes.dashboard.children)
