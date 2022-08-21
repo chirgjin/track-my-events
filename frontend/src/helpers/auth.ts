@@ -16,7 +16,7 @@ class AuthHandler {
   }
 
   public get isLoggedIn() {
-    return Boolean(this.accessToken && this.authData?.refreshToken && this.user)
+    return Boolean(this.accessToken && this.refreshToken && this.user)
   }
 
   constructor() {
@@ -37,8 +37,8 @@ class AuthHandler {
     }
   }
 
-  public update(data: typeof this.authData) {
-    this.authData = data
+  public update(data: typeof this.authData | null) {
+    this.authData = data || undefined
 
     if (!this.authData) {
       localStorage.removeItem(this.localStorageKey)
@@ -51,7 +51,9 @@ class AuthHandler {
     return this.authData?.accessToken
   }
 
-  public async refresh() {}
+  public get refreshToken() {
+    return this.authData?.refreshToken
+  }
 
   public get user() {
     return this.authData?.user

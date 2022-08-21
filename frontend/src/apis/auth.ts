@@ -54,3 +54,20 @@ export async function register({
 
   return response.data.data
 }
+
+export async function refreshToken({ refreshToken }: { refreshToken: string }) {
+  const response = await axios.post<{
+    data: {
+      user: User
+      accessToken: string
+      refreshToken: string
+    }
+    errors: null
+  }>(`/api/user-service/v1/public/auth/refresh-token/`, {
+    refreshToken,
+  })
+
+  auth.update(response.data.data)
+
+  return response.data.data
+}

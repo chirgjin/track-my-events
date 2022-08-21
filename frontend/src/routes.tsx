@@ -4,7 +4,8 @@ import UnAuthenticatedLayout from 'src/layouts/UnAuthenticated'
 import Login from 'src/views/Login'
 import Register from 'src/views/Register'
 import LoggedInLayout from 'src/layouts/LoggedIn'
-import Dashboard from './views/Dashboard'
+import Dashboard from 'src/views/Dashboard'
+import Profile from 'src/views/Profile'
 
 export const routes = buildRoutes({
   auth: {
@@ -37,7 +38,7 @@ export const routes = buildRoutes({
       },
       profile: {
         path: 'profile',
-        component: <Dashboard />,
+        component: <Profile />,
         displayName: (
           <>
             <i className="ni ni-single-02 text-default" /> Profile
