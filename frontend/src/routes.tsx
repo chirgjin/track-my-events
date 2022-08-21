@@ -6,6 +6,7 @@ import Register from 'src/views/Register'
 import LoggedInLayout from 'src/layouts/LoggedIn'
 import Dashboard from 'src/views/Dashboard'
 import Profile from 'src/views/Profile'
+import Setup from 'src/views/Setup'
 
 export const routes = buildRoutes({
   auth: {
@@ -24,7 +25,7 @@ export const routes = buildRoutes({
   },
 
   dashboard: {
-    path: 'dashboard',
+    path: '',
     component: <LoggedInLayout />,
     children: {
       overview: {
@@ -47,7 +48,7 @@ export const routes = buildRoutes({
       },
       setup: {
         path: 'setup',
-        component: <Dashboard />,
+        component: <Setup />,
         displayName: (
           <>
             <i className="fa-solid fa-list-check text-warning"></i> Setup

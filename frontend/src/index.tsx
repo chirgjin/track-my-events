@@ -11,7 +11,6 @@ import { routes } from 'src/routes'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
-  // <React.StrictMode>
   <BrowserRouter>
     {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
