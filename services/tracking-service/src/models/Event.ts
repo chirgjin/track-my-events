@@ -31,39 +31,50 @@ export class Event extends Entity {
   }
 }
 
-export const eventSchema = new Schema(Event, {
-  internalUserId: {
-    type: 'string',
-  },
+export const eventSchema = new Schema(
+  Event,
+  {
+    internalUserId: {
+      type: 'string',
+    },
 
-  sessionId: {
-    type: 'string',
-  },
-  eventTime: {
-    type: 'date',
-  },
-  eventName: {
-    type: 'string',
-  },
-  page: {
-    type: 'string',
-  },
-  referrer: {
-    type: 'string',
-  },
-  _context: {
-    type: 'string',
-  },
-  userId: {
-    type: 'string',
-  },
-  userAgent: {
-    type: 'string',
-  },
+    sessionId: {
+      type: 'string',
+      sortable: true,
+    },
+    eventTime: {
+      type: 'date',
+      sortable: true,
+    },
+    eventName: {
+      type: 'string',
+      sortable: true,
+    },
+    page: {
+      type: 'string',
+      sortable: true,
+    },
+    referrer: {
+      type: 'string',
+    },
+    _context: {
+      type: 'string',
+    },
+    userId: {
+      type: 'string',
+      sortable: true,
+    },
+    userAgent: {
+      type: 'string',
+    },
 
-  createdAt: {
-    type: 'date',
+    createdAt: {
+      type: 'date',
+    },
   },
-})
+  {
+    dataStructure: 'HASH',
+  }
+)
 
 export const eventRepository = omClient.fetchRepository(eventSchema)
