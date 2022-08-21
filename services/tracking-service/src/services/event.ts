@@ -31,5 +31,6 @@ export async function createEvent({
     _context: JSON.stringify(context),
     userId: userId ?? null,
     userAgent: userAgent ?? null,
+    createdAt: new Date(),
   })
 }
