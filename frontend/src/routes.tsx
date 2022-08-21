@@ -29,6 +29,29 @@ export const routes = buildRoutes({
       overview: {
         path: '',
         component: <Dashboard />,
+        displayName: (
+          <>
+            <i className="ni ni-tv-2 text-success" /> Dashboard
+          </>
+        ),
+      },
+      profile: {
+        path: 'profile',
+        component: <Dashboard />,
+        displayName: (
+          <>
+            <i className="ni ni-single-02 text-default" /> Profile
+          </>
+        ),
+      },
+      setup: {
+        path: 'setup',
+        component: <Dashboard />,
+        displayName: (
+          <>
+            <i className="fa-solid fa-list-check text-warning"></i> Setup
+          </>
+        ),
       },
     },
   },

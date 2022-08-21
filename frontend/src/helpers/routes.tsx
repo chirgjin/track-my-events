@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 type BaseRoute = {
   path: string
   component: React.ReactNode
+  displayName?: React.ReactNode
   children?: Record<string, BaseRoute>
 }
 
