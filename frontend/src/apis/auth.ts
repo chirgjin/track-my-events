@@ -1,4 +1,4 @@
-import { axios } from 'src/apis'
+import { axios, isAxiosError } from 'src/apis'
 import auth, { User } from 'src/helpers/auth'
 
 export async function login({
@@ -56,18 +56,31 @@ export async function register({
 }
 
 export async function refreshToken({ refreshToken }: { refreshToken: string }) {
-  const response = await axios.post<{
-    data: {
-      user: User
-      accessToken: string
-      refreshToken: string
+  try {
+    const response = await axios.post<{
+      data: {
+        user: User
+        accessToken: string
+        refreshToken: string
+      }
+      errors: null
+    }>(`/api/user-service/v1/public/auth/refresh-token/`, {
+      refreshToken,
+    })
+
+    auth.update(response.data.data)
+
+    return response.data.data
+  } catch (err) {
+    if (
+      isAxiosError(err) &&
+      err.response &&
+      err.response.status >= 400 &&
+      err.response.status < 500
+    ) {
+      auth.update(null)
+      window.location.reload()
     }
-    errors: null
-  }>(`/api/user-service/v1/public/auth/refresh-token/`, {
-    refreshToken,
-  })
-
-  auth.update(response.data.data)
-
-  return response.data.data
+    throw err
+  }
 }
