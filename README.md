@@ -2,7 +2,10 @@
 
 An event tracking system built on microservices architecture using Redis Stack as the primary database & communication mechanism (pub/sub) for backend & React for frontend.
 
-[Insert app screenshots](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#uploading-assets)
+![Login Page](./documentation/images/Login.png)
+![Register Page](./documentation/images/Register.png)
+![Profile Page](./documentation/images/Profile.png)
+![Setup Page](./documentation/images/Setup.png)
 
 <!-- # Overview video (Optional)
 
