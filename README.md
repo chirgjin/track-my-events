@@ -186,15 +186,55 @@ How the data is stored:
 
 ## How to run it locally?
 
-[Make sure you test this with a fresh clone of your repo, these instructions will be used to judge your app.]
-
 ### Prerequisites
 
-[Fill out with any prerequisites (e.g. Node, Docker, etc.). Specify minimum versions]
+- Node - v16.15.0
+- Yarn - v1.22.18
+- Redis Stack Server
 
 ### Local installation
 
-[Insert instructions for local installation]
+- Install the dependencies
+
+```bash
+yarn install
+```
+
+- Go to `services/user-service` (`cd ./services/user-service`) and then:
+
+```bash
+# copy file and set proper data inside
+cp .env.example .env
+
+yarn dev
+```
+
+- Go to `services/tracking-service` (`cd ./services/tracking-service`) and then:
+
+```bash
+# copy file and set proper data inside
+cp .env.example .env
+
+yarn dev
+```
+
+- Go to `services/gateway` (`cd ./services/gateway`) and then:
+
+```bash
+# copy file and set proper data inside
+cp .env.example .env
+
+yarn dev
+```
+
+- Go to `frontend` (`cd ./frontend`) and then:
+
+```bash
+# copy file and set proper data inside
+cp .env.example .env
+
+yarn start
+```
 
 ## Deployment
 

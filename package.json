@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": "true",
   "workspaces": [
-    "services/*"
+    "services/*",
+    "frontend"
   ],
   "description": "User tracking system made using redis & express",
   "repository": {
