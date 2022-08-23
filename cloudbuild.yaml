@@ -1,0 +1,35 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker" # build gateway service
+    args:
+      [
+        "build",
+        "-t",
+        "${_GATEWAY_ARTIFACT_REPO}:${SHORT_SHA}",
+        "services/gateway/",
+      ]
+  - name: "gcr.io/cloud-builders/docker" # build user service
+    args:
+      [
+        "build",
+        "-t",
+        "${_USER_ARTIFACT_REPO}:${SHORT_SHA}",
+        "services/user-service/",
+      ]
+  - name: "gcr.io/cloud-builders/docker" # build tracking service
+    args:
+      [
+        "build",
+        "-t",
+        "${_TRACKING_ARTIFACT_REPO}:${SHORT_SHA}",
+        "services/tracking-service/",
+      ]
+images:
+  [
+    "${_GATEWAY_ARTIFACT_REPO}:${SHORT_SHA}",
+    "${_USER_ARTIFACT_REPO}:${SHORT_SHA}",
+    "${_TRACKING_ARTIFACT_REPO}:${SHORT_SHA}",
+  ]
+
+timeout: 1800s
+options:
+  logging: CLOUD_LOGGING_ONLY
