@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { cleanEnv, port, str, num, url } from 'envalid'
+import { cleanEnv, port, str, url } from 'envalid'
 import { resolve } from 'path'
 
 config()
@@ -8,17 +8,9 @@ const validateEnv = cleanEnv(process.env, {
   NODE_ENV: str(),
   PORT: port(),
 
-  REDIS_PUBSUB_HOST: str(),
-  REDIS_PUBSUB_PORT: port(),
-  REDIS_PUBSUB_DB: num({
-    default: 0,
-  }),
+  REDIS_PUBSUB_URI: str(),
 
-  REDIS_OM_HOST: str(),
-  REDIS_OM_PORT: port(),
-  REDIS_OM_DB: num({
-    default: 0,
-  }),
+  REDIS_OM_URI: str(),
 
   USER_SERVICE_URL: url(),
 })
@@ -26,12 +18,8 @@ const validateEnv = cleanEnv(process.env, {
 export const {
   NODE_ENV,
   PORT,
-  REDIS_PUBSUB_HOST,
-  REDIS_PUBSUB_PORT,
-  REDIS_PUBSUB_DB,
-  REDIS_OM_HOST,
-  REDIS_OM_PORT,
-  REDIS_OM_DB,
+  REDIS_PUBSUB_URI,
+  REDIS_OM_URI,
   USER_SERVICE_URL,
 } = validateEnv
 export const APP_ROOT = resolve(__dirname, '..')
