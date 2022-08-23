@@ -5,7 +5,7 @@ steps:
         "build",
         "-t",
         "${_ARTIFACT_REPO}:${SHORT_SHA}",
-        "services/user-service/",
+        "services/tracking-service/",
       ]
 images: ["${_ARTIFACT_REPO}:${SHORT_SHA}"]
 
