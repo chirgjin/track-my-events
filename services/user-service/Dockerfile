@@ -12,7 +12,7 @@ RUN yarn install
 COPY --chown=node:node . .
 
 FROM dependencies AS build
-RUN tsc --build . && tsc-alias
+RUN npx tsc --build . && npx tsc-alias
 
 FROM base AS production
 ENV NODE_ENV=production
