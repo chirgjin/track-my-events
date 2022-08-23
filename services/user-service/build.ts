@@ -10,7 +10,9 @@ async function build() {
     })
   }
 
-  await promisify(exec)(`tsc --build . && tsc-alias`)
+  await promisify(exec)(`tsc --build . && tsc-alias`, {
+    cwd: __dirname,
+  })
 }
 
 build()
