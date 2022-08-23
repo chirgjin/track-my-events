@@ -1,0 +1,3 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "${_ARTIFACT_REPO}/:${_IMAGE_TAG}", "."]
