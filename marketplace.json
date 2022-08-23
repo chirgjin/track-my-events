@@ -1,0 +1,32 @@
+{
+  "app_name": "Tracking System",
+  "description": "Event Driven tracking system built using RedisStack & Pub/Sub",
+  "hidden": "true",
+  "rank": "25",
+  "type": "Full App",
+  "contributed_by": "Community",
+  "repo_url": "https://github.com/chirgjin/user-tracking",
+  "download_url": "https://github.com/chirgjin/user-tracking/archive/main.zip",
+  "hosted_url": "",
+  "language": ["Typescript"],
+  "redis_commands": [
+    "JSON.SET",
+    "JSON.GET",
+    "FT.SEARCH",
+    "FT.AGGREGATE",
+    "HGET",
+    "HSET",
+    "PUBLISH",
+    "SUBSCRIBE"
+  ],
+  "redis_features": ["pub/sub"],
+  "redis_modules": ["RedisJSON", "RedisSearch"],
+  "app_image_urls": [
+    "https://github.com/chirgjin/user-tracking/raw/main/documentation/images/Login.png",
+    "https://github.com/chirgjin/user-tracking/raw/main/documentation/images/Setup.png"
+  ],
+  "youtube_url": "",
+  "special_tags": ["Hackathon"],
+  "verticals": [],
+  "markdown": "https://raw.githubusercontent.com/chirgjin/user-tracking/main/README.md"
+}
