@@ -1,6 +1,7 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "${_ARTIFACT_REPO}/:${_IMAGE_TAG}", "."]
+    args: ["build", "-t", "${_ARTIFACT_REPO}:${_IMAGE_TAG}", "."]
+images: ["${_ARTIFACT_REPO}:${_IMAGE_TAG}"]
 
 options:
   logging: CLOUD_LOGGING_ONLY
