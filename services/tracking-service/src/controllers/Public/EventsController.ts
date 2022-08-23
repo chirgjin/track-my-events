@@ -12,7 +12,7 @@ export default class {
       apiKey: new StringField({}),
       sessionId: new StringField({}),
       userId: new StringField({}),
-      eventTime: new NumberField({}), // timestamp in epoch
+      eventTime: new NumberField({}), // timestamp in milliseconds
       eventName: new StringField({}),
       page: new StringField({}),
       referrer: new StringField({ required: false, allowNull: true }),
