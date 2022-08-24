@@ -18,7 +18,7 @@ An event tracking system built on microservices architecture using Redis Stack a
 
 Here's a short video that explains the project and how it uses Redis:
 
-[![Overview Video](https://i.ytimg.com/vi/vyxdC1qK4NE/maxresdefault.jpg)](https://www.youtube.com/watch?v=vyxdC1qK4NE)
+[![Overview Video](https://github.com/chirgjin/tracking-system/raw/main/documentation/images/Overview.png)](https://www.youtube.com/watch?v=-Na1VFiwVDs)
 
 ## How it works
 
