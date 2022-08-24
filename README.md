@@ -2,8 +2,8 @@
 
 An event tracking system built on microservices architecture using Redis Stack as the primary database & communication mechanism (pub/sub) for backend & React for frontend.
 
-![Dashboard](documentation/images/Dashboard.png)
-![Setup Page](documentation/images/Setup.png)
+![Dashboard](/documentation/images/Dashboard.png)
+![Setup Page](/documentation/images/Setup.png)
 
 <!-- # Overview video (Optional)
 
@@ -90,7 +90,7 @@ class Event extends Entity {
 
 ### Registration / Login
 
-![Register Page](documentation/images/Register.png)
+![Register Page](/documentation/images/Register.png)
 
 - The user data is stored as JSON where each user entry contains the values:
 
@@ -129,7 +129,7 @@ class Event extends Entity {
 
 ### Profile Page
 
-![Profile Page](documentation/images/Profile.png)
+![Profile Page](/documentation/images/Profile.png)
 
 - The user data is already stored in the `User:{userId}` JSON key.
 - The user can update either their `name` or `password`
