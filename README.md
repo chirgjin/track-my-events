@@ -2,16 +2,23 @@
 
 An event tracking system built on microservices architecture using Redis Stack as the primary database & communication mechanism (pub/sub) for backend & React for frontend.
 
-![Dashboard](/documentation/images/Dashboard.png)
-![Setup Page](/documentation/images/Setup.png)
+#### Dashboard
 
-<!-- # Overview video (Optional)
+![Dashboard](https://github.com/chirgjin/tracking-system/raw/main/documentation/images/Dashboard.png)
+
+#### SDK Setup
+
+![Setup Page](https://github.com/chirgjin/tracking-system/raw/main/documentation/images/Setup.png)
+
+#### Architecture
+
+![Setup Page](https://github.com/chirgjin/tracking-system/raw/main/documentation/images/Architecture.png)
+
+# Overview video
 
 Here's a short video that explains the project and how it uses Redis:
 
-[Insert your own video here, and remove the one below]
-
-[![Embed your YouTube video](https://i.ytimg.com/vi/vyxdC1qK4NE/maxresdefault.jpg)](https://www.youtube.com/watch?v=vyxdC1qK4NE) -->
+[![Overview Video](https://i.ytimg.com/vi/vyxdC1qK4NE/maxresdefault.jpg)](https://www.youtube.com/watch?v=vyxdC1qK4NE)
 
 ## How it works
 
@@ -90,7 +97,7 @@ class Event extends Entity {
 
 ### Registration / Login
 
-![Register Page](/documentation/images/Register.png)
+![Register Page](https://github.com/chirgjin/tracking-system/raw/main/documentation/images/Register.png)
 
 - The user data is stored as JSON where each user entry contains the values:
 
@@ -129,7 +136,7 @@ class Event extends Entity {
 
 ### Profile Page
 
-![Profile Page](/documentation/images/Profile.png)
+![Profile Page](https://github.com/chirgjin/tracking-system/raw/main/documentation/images/Profile.png)
 
 - The user data is already stored in the `User:{userId}` JSON key.
 - The user can update either their `name` or `password`
