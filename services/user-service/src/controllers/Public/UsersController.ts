@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import BadRequestException from 'src/exceptions/BadRequestException'
+import { verifyPassword } from 'src/helpers'
 import {
   createUser,
   updateUser,
@@ -89,7 +90,10 @@ export default class {
     }
 
     if (body.oldPassword || body.password || body.confirmPassword) {
-      if (!body.oldPassword || !(await user.verifyPassword(body.oldPassword))) {
+      if (
+        !body.oldPassword ||
+        !(await verifyPassword(user, body.oldPassword))
+      ) {
         throw new BadRequestException({
           oldPassword: 'Incorrect password',
         })

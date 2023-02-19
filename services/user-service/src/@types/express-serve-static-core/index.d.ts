@@ -3,9 +3,8 @@
 /**
  * This file contains declaration merging for express
  */
+import { User } from '@prisma/client'
 import * as core from 'express-serve-static-core'
-
-import { User } from 'src/models'
 
 declare module 'express-serve-static-core' {
   interface Request {
