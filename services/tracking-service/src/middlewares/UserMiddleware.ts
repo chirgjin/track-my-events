@@ -10,14 +10,9 @@ export default function (req: Request, _res: Response, next: NextFunction) {
       user = JSON.parse(req.headers.user)
 
       if (
-        [
-          'entityId',
-          'name',
-          'email',
-          'apiKey',
-          'createdAt',
-          'updatedAt',
-        ].filter((key) => !(key in user!)).length > 0
+        ['id', 'name', 'email', 'apiKey', 'createdAt', 'updatedAt'].filter(
+          (key) => !(key in user!)
+        ).length > 0
       ) {
         user = undefined
       }

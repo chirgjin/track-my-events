@@ -17,7 +17,7 @@ app.initialize().then(async () => {
       })
 
       await createEvent({
-        internalUserId: user.entityId,
+        internalUserId: user.id,
 
         sessionId: eventData.sessionId,
         eventTime: new Date(eventData.eventTime),

@@ -15,7 +15,7 @@ export type SetKey<
   : T & Record<Key, Value>
 
 export type User = {
-  entityId: string
+  id: string
   name: string
   email: string
   apiKey: string
