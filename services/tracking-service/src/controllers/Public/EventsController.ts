@@ -1,8 +1,8 @@
+import { Prisma } from '@prisma/client'
 import { Request, Response } from 'express'
 
-import { aggregate } from 'src/helpers'
 import { EventData } from 'src/helpers/types'
-import { eventRepository } from 'src/models'
+import { prisma } from 'src/prismaClient'
 import { pubsubClient } from 'src/redisClient'
 import { NumberField, ObjectField, StringField, validate } from 'src/validator'
 
@@ -40,62 +40,52 @@ export default class {
     return res.success(
       {
         eventsRecorded: {
-          thisMonth: await eventRepository
-            .search()
-            .where('internalUserId')
-            .equals(user.entityId)
-            .where('eventTime')
-            .greaterThanOrEqualTo(monthStart)
-            .where('eventTime')
-            .lessThan(tomorrow)
-            .count(),
-          today: await eventRepository
-            .search()
-            .where('internalUserId')
-            .equals(user.entityId)
-            .where('eventTime')
-            .greaterThanOrEqualTo(today)
-            .where('eventTime')
-            .lessThan(tomorrow)
-            .count(),
+          thisMonth: await prisma.event.count({
+            where: {
+              internalUserId: user.id,
+              eventTime: {
+                gte: monthStart,
+                lt: tomorrow,
+              },
+            },
+          }),
+          today: await prisma.event.count({
+            where: {
+              internalUserId: user.id,
+              eventTime: {
+                gte: today,
+                lt: tomorrow,
+              },
+            },
+          }),
         },
         activeUsers: {
-          today:
-            (
-              await aggregate<{ count: string }>([
-                `FT.AGGREGATE`,
-                `Event:index`,
-                `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
-                  today.getTime() / 1000
-                } +inf]) ) (@eventTime:[-inf (${tomorrow.getTime() / 1000}]) )`,
-                `GROUPBY`,
-                0,
-                `REDUCE`,
-                `COUNT_DISTINCT`,
-                `1`,
-                `@userId`,
-                `as`,
-                `count`,
-              ])
-            ).pop()?.count ?? 0,
-          thisMonth:
-            (
-              await aggregate<{ count: string }>([
-                `FT.AGGREGATE`,
-                `Event:index`,
-                `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
-                  monthStart.getTime() / 1000
-                } +inf]) ) (@eventTime:[-inf (${tomorrow.getTime() / 1000}]) )`,
-                `GROUPBY`,
-                0,
-                `REDUCE`,
-                `COUNT_DISTINCT`,
-                `1`,
-                `@userId`,
-                `as`,
-                `count`,
-              ])
-            ).pop()?.count ?? 0,
+          // TODO: use raw query or an alternative solution here
+          // currently we have to use this hack because prisma doesn't support COUNT(DISTINCT)
+          today: (
+            await prisma.event.groupBy({
+              by: ['userId'],
+              where: {
+                internalUserId: user.id,
+                eventTime: {
+                  gte: today,
+                  lt: tomorrow,
+                },
+              },
+            })
+          ).length,
+          thisMonth: (
+            await prisma.event.groupBy({
+              by: ['userId'],
+              where: {
+                internalUserId: user.id,
+                eventTime: {
+                  gte: monthStart,
+                  lt: tomorrow,
+                },
+              },
+            })
+          ).length,
         },
       },
       200
@@ -117,40 +107,26 @@ export default class {
     }
 
     const data = (
-      await aggregate<{
-        day: string
-        sessions: string
-        users: string
-      }>([
-        `FT.AGGREGATE`,
-        `Event:index`,
-        `( ( (@internalUserId:{${user.entityId}}) (@eventTime:[${
-          dates[dates.length - 1].getTime() / 1000
-        } +inf]) ) (@eventTime:[-inf (${
-          (dates[0].getTime() + 8.64e7) / 1000
-        }]) )`,
-        `APPLY`,
-        `timefmt(@eventTime, '%-d-%-m-%Y')`,
-        `AS`,
-        `day`,
-        `GROUPBY`,
-        1,
-        `@day`,
-        `REDUCE`,
-        `COUNT_DISTINCT`,
-        `1`,
-        `@sessionId`,
-        `as`,
-        `sessions`,
-        `REDUCE`,
-        `COUNT_DISTINCT`,
-        `1`,
-        `@userId`,
-        `as`,
-        `users`,
-      ])
+      await prisma.$queryRaw<{ day: Date; sessions: bigint; users: bigint }[]>(
+        Prisma.sql`SELECT
+        COUNT(DISTINCT "sessionId") as sessions, "eventTime"::date as day, COUNT(DISTINCT "userId") as users 
+        FROM "Event"
+        WHERE "eventTime" >= ${
+          dates[dates.length - 1]
+        } and "eventTime" < ${new Date(
+          dates[0].getTime() + 8.64e7
+        )} and "internalUserId" = ${user.id}::uuid GROUP BY "eventTime"::date`
+      )
     ).reduce((acc, obj) => {
-      acc[obj.day] = obj
+      const day = `${obj.day.getDate()}-${
+        obj.day.getMonth() + 1
+      }-${obj.day.getFullYear()}`
+
+      acc[day] = {
+        day,
+        sessions: obj.sessions.toString(),
+        users: obj.users.toString(),
+      }
 
       return acc
     }, {} as Record<string, { day: string; sessions: string; users: string }>)
@@ -182,36 +158,24 @@ export default class {
       }),
     })
 
-    const data = await aggregate<{
-      day: string
-      sessions: string
-      users: string
-    }>([
-      `FT.AGGREGATE`,
-      `Event:index`,
-      `(@internalUserId:{${user.entityId}})`,
-      `GROUPBY`,
-      1,
-      `@${groupBy}`,
-      `REDUCE`,
-      `COUNT_DISTINCT`,
-      `1`,
-      `@sessionId`,
-      `as`,
-      `sessions`,
-      `REDUCE`,
-      `COUNT_DISTINCT`,
-      `1`,
-      `@userId`,
-      `as`,
-      `users`,
-      `REDUCE`,
-      `COUNT`,
-      0,
-      `as`,
-      `count`,
-    ])
+    const data = await prisma.$queryRawUnsafe<
+      { eventName?: string; page?: string; sessions: bigint; users: bigint }[]
+    >(
+      `SELECT
+        COUNT(DISTINCT "sessionId") as sessions, COUNT(DISTINCT "userId") as users, "${groupBy}"
+        FROM "Event"
+        WHERE "internalUserId" = $1::uuid
+        GROUP BY "${groupBy}"`,
+      user.id
+    )
 
-    return res.success(data, 200)
+    return res.success(
+      data.map((obj) => ({
+        ...obj,
+        sessions: String(obj.sessions),
+        users: String(obj.users),
+      })),
+      200
+    )
   }
 }
