@@ -38,7 +38,6 @@ class App {
    */
   public async initialize() {
     await require('src/redisClient').pubsubClient.connect()
-    await require('src/redisClient').createIndexes()
   }
 
   public listen() {

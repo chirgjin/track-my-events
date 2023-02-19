@@ -21,12 +21,13 @@ repl.ready((repl) => {
 
 // add helpers to help the developer
 repl.addMethod(
-  'loadModels',
+  'loadPrisma',
   () => {
-    return (repl.server.context.models = require(`${APP_ROOT}/models`))
+    return (repl.server.context.prisma =
+      require(`${APP_ROOT}/prismaClient`).prisma)
   },
   {
-    description: 'Load all models & store them in `models` variable',
+    description: 'Load the prisma client & store it in `prisma` variable',
   }
 )
 
