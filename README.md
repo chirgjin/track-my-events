@@ -12,7 +12,7 @@ An event tracking system built on microservices architecture using PostgreSQL as
 
 #### Architecture
 
-![Setup Page](https://github.com/chirgjin/track-my-events/raw/main/documentation/images/Architecture.png)
+![Architecture](https://github.com/chirgjin/track-my-events/raw/main/documentation/images/Architecture.png)
 
 ## How it works
 
