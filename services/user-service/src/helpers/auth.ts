@@ -1,17 +1,32 @@
-import { accessTokenRepository, userRepository } from 'src/models'
+import { User } from '@prisma/client'
+import argon2 from 'argon2'
+
+import { prisma } from 'src/prismaClient'
 
 export async function verifyToken(accessToken: string) {
-  const accessTokenInstance = await accessTokenRepository
-    .search()
-    .where('token')
-    .equals(accessToken)
-    .first()
+  const accessTokenInstance = await prisma.accessToken.findFirst({
+    where: {
+      token: accessToken,
+    },
+    include: {
+      user: true,
+    },
+  })
 
-  if (!accessTokenInstance || !accessTokenInstance.isValid) {
+  if (
+    !accessTokenInstance ||
+    accessTokenInstance.expiresOn.getTime() < Date.now()
+  ) {
     return null
   }
 
-  const user = await userRepository.fetch(accessTokenInstance.userId)
+  return accessTokenInstance.user
+}
 
-  return user
+export async function verifyPassword(user: User, password: string) {
+  try {
+    return await argon2.verify(user.password, password)
+  } catch (e) {
+    return false
+  }
 }

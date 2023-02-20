@@ -1,7 +1,25 @@
+import { User } from '@prisma/client'
 import argon2 from 'argon2'
 
 import BadRequestException from 'src/exceptions/BadRequestException'
-import { User, userRepository } from 'src/models'
+import { generateRandomString } from 'src/helpers'
+import { prisma } from 'src/prismaClient'
+
+export async function generateApiKey() {
+  let apiKey: string
+
+  do {
+    apiKey = await generateRandomString(16)
+  } while (
+    (await prisma.user.count({
+      where: {
+        apiKey,
+      },
+    })) > 0
+  )
+
+  return apiKey
+}
 
 export async function createUser({
   name,
@@ -11,19 +29,25 @@ export async function createUser({
   const userEmail = email.toLowerCase()
 
   if (
-    (await userRepository.search().where('email').equals(userEmail).count()) > 0
+    (await prisma.user.count({
+      where: {
+        email: userEmail,
+      },
+    })) > 0
   ) {
     throw new BadRequestException({
       email: 'User with this email already exists',
     })
   }
 
-  const user = await userRepository.createAndSave({
-    name,
-    email: userEmail,
-    password: await argon2.hash(password),
-    apiKey: await User.generateApiKey(),
-    createdAt: new Date(),
+  const user = await prisma.user.create({
+    data: {
+      name,
+      email: userEmail,
+      password: await argon2.hash(password),
+      createdAt: new Date(),
+      apiKey: await generateApiKey(),
+    },
   })
 
   return user
@@ -34,15 +58,22 @@ export async function updateUser({
   password,
   user,
 }: { user: User } & Partial<Pick<User, 'name' | 'password'>>) {
+  const data: Partial<User> = {}
+
   if (name) {
-    user.name = name
+    data.name = name
   }
 
   if (password) {
-    user.password = await argon2.hash(password)
+    data.password = await argon2.hash(password)
   }
 
-  user.updatedAt = new Date()
+  data.updatedAt = new Date()
 
-  await userRepository.save(user)
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data,
+  })
 }

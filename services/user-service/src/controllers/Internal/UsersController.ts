@@ -1,6 +1,7 @@
+import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 
-import { User, userRepository } from 'src/models'
+import { prisma } from 'src/prismaClient'
 import { StringField, validate } from 'src/validator'
 
 export default class {
@@ -19,21 +20,17 @@ export default class {
       )
     }
 
-    let user: User | null
+    let where: Partial<User> = {}
 
     if (body.id) {
-      user = await userRepository.fetch(body.id)
-
-      if (!user.email) {
-        user = null
-      }
+      where.id = body.id
     } else {
-      user = await userRepository
-        .search()
-        .where('apiKey')
-        .equals(body.apiKey!)
-        .first()
+      where.apiKey = body.apiKey
     }
+
+    const user = await prisma.user.findFirst({
+      where,
+    })
 
     if (!user) {
       return res.error(

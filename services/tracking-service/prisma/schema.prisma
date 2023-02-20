@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id             Int    @id @default(autoincrement())
+  internalUserId String @db.Uuid() // id of our internal user to which this event is linked to
+
+  sessionId String   @db.VarChar(256)
+  eventTime DateTime
+  eventName String   @db.VarChar(256)
+  page      String   @db.VarChar(512)
+  referrer  String?  @db.VarChar(512)
+  context   Json
+  userId    String?  @db.VarChar(256)
+  userAgent String?  @db.VarChar(256)
+  createdAt DateTime @default(now())
+}

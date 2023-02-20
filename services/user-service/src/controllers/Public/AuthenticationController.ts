@@ -1,11 +1,8 @@
 import { Request, Response } from 'express'
 
 import BadRequestException from 'src/exceptions/BadRequestException'
-import {
-  accessTokenRepository,
-  refreshTokenRepository,
-  userRepository,
-} from 'src/models'
+import { verifyPassword } from 'src/helpers'
+import { prisma } from 'src/prismaClient'
 import { createAccessToken, createRefreshToken } from 'src/services'
 import { StringField, validate } from 'src/validator'
 
@@ -13,14 +10,14 @@ export default class {
   public async login(req: Request, res: Response) {
     const body = await validate(req.body, {
       email: new StringField({ email: true, maxLength: 256, minLength: 3 }),
-      password: new StringField({}),
+      password: new StringField({ maxLength: 32, minLength: 3 }),
     })
 
-    const user = await userRepository
-      .search()
-      .where('email')
-      .equals(body.email.toLowerCase())
-      .first()
+    const user = await prisma.user.findFirst({
+      where: {
+        email: body.email.toLowerCase(),
+      },
+    })
 
     if (!user) {
       throw new BadRequestException({
@@ -28,7 +25,7 @@ export default class {
       })
     }
 
-    if (!(await user.verifyPassword(body.password))) {
+    if (!(await verifyPassword(user, body.password))) {
       throw new BadRequestException({
         password: 'Incorrect password',
       })
@@ -52,11 +49,14 @@ export default class {
       refreshToken: new StringField({}),
     })
 
-    const refreshToken = await refreshTokenRepository
-      .search()
-      .where('token')
-      .equals(body.refreshToken)
-      .first()
+    const refreshToken = await prisma.refreshToken.findFirst({
+      where: {
+        token: body.refreshToken,
+      },
+      include: {
+        user: true,
+      },
+    })
 
     if (!refreshToken) {
       throw new BadRequestException({
@@ -64,14 +64,18 @@ export default class {
       })
     }
 
-    const user = await userRepository.fetch(refreshToken.userId)
+    const user = refreshToken.user
 
     const accessToken = await createAccessToken({
       user,
     })
     const newRefreshToken = await createRefreshToken({ user })
 
-    await refreshTokenRepository.remove(refreshToken.entityId)
+    await prisma.refreshToken.delete({
+      where: {
+        id: refreshToken.id,
+      },
+    })
 
     return res.success(
       {
@@ -89,24 +93,32 @@ export default class {
       accessToken: new StringField({}),
     })
 
-    const accessToken = await accessTokenRepository
-      .search()
-      .where('token')
-      .equals(body.accessToken)
-      .first()
+    const accessToken = await prisma.accessToken.findFirst({
+      where: {
+        token: body.accessToken,
+      },
+    })
 
     if (accessToken) {
-      await accessTokenRepository.remove(accessToken.entityId)
+      await prisma.accessToken.delete({
+        where: {
+          id: accessToken.id,
+        },
+      })
     }
 
-    const refreshToken = await refreshTokenRepository
-      .search()
-      .where('token')
-      .equals(body.refreshToken)
-      .first()
+    const refreshToken = await prisma.refreshToken.findFirst({
+      where: {
+        token: body.refreshToken,
+      },
+    })
 
     if (refreshToken) {
-      await refreshTokenRepository.remove(refreshToken.entityId)
+      await prisma.refreshToken.delete({
+        where: {
+          id: refreshToken.id,
+        },
+      })
     }
 
     return res.success({}, 200)

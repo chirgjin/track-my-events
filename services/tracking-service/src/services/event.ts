@@ -1,4 +1,4 @@
-import { eventRepository } from 'src/models'
+import { prisma } from 'src/prismaClient'
 
 export async function createEvent({
   internalUserId,
@@ -21,16 +21,18 @@ export async function createEvent({
   userId?: string | null
   userAgent?: string | null
 }) {
-  return await eventRepository.createAndSave({
-    internalUserId,
-    sessionId,
-    eventTime,
-    eventName,
-    page,
-    referrer: referrer ?? null,
-    _context: JSON.stringify(context),
-    userId: userId ?? null,
-    userAgent: userAgent ?? null,
-    createdAt: new Date(),
+  return await prisma.event.create({
+    data: {
+      internalUserId,
+      sessionId,
+      eventName,
+      eventTime,
+      page,
+      context,
+      userId,
+      referrer: referrer ?? null,
+      userAgent: userAgent ?? null,
+      createdAt: new Date(),
+    },
   })
 }

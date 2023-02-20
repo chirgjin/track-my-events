@@ -44,9 +44,7 @@ class App {
    * Function which initializes things common to both
    * repl & web-server.
    */
-  private async initialize() {
-    await require('src/redisClient').createIndexes()
-  }
+  private async initialize() {}
 
   public listen() {
     this.app.listen(this.port, () => {

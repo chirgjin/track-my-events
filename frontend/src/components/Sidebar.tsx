@@ -38,7 +38,7 @@ export function SideBar() {
           to={routes.dashboard.children.overview.fullPath}
           tag={Link}
         >
-          <span className="h4">Tracking System</span>
+          <span className="h4">TrackMyEvents</span>
         </NavbarBrand>
 
         <Collapse navbar isOpen={collapseOpen}>
@@ -49,7 +49,7 @@ export function SideBar() {
                   to={routes.dashboard.children.overview.fullPath}
                   className="h4"
                 >
-                  Tracking System
+                  TrackMyEvents
                 </Link>
               </Col>
               <Col className="collapse-close" xs="6">
